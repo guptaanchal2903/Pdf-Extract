@@ -5,5 +5,4 @@ wordcloud
 matplotlib
 pandas
 numpy
-pypdf==4.2.0
 
