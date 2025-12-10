@@ -1,7 +1,7 @@
 
 
 import streamlit as st
-import pyPDF2
+import pypdf
 import nltk
 import re
 import matplotlib.pyplot as plt
