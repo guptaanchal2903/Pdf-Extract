@@ -1,7 +1,7 @@
 
 
 import streamlit as st
-import pypdf
+import pyPDF2
 import nltk
 import re
 import matplotlib.pyplot as plt
@@ -31,7 +31,7 @@ if uploaded_file and keywords_input.strip():
     st.write(f"### 🔎 Searching for paragraphs containing ALL keywords: {keywords}")
 
     # Read PDF
-    reader = pypdf.PdfReader(uploaded_file)
+    reader = pyPDF2.PdfReader(uploaded_file)
     full_text = ""
     for page in reader.pages:
         full_text += page.extract_text() or ""
