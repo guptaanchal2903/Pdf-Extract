@@ -1,11 +1,12 @@
 streamlit
-pypdf
+PyPDF2
 nltk==3.8.1
 wordcloud
 matplotlib
 pandas
 numpy
 pypdf==4.2.0
+
 
 
 
