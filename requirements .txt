@@ -1,5 +1,6 @@
 streamlit
 pypdf
+pdfplumber
 nltk==3.8.1
 wordcloud
 matplotlib
@@ -7,6 +8,7 @@ pandas
 numpy
 pypdf==4.2.0
 # force rebuild
+
 
 
 
