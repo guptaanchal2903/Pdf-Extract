@@ -1,7 +1,4 @@
-
-
 import streamlit as st
-import pypdf
 import pdfplumber
 import nltk
 import re
@@ -27,34 +24,29 @@ keywords_input = st.text_input("Enter keywords (comma-separated)", "")
 # Process only if both PDF and keywords provided
 if uploaded_file and keywords_input.strip():
 
-    # Parse keywords
     keywords = [k.strip().lower() for k in keywords_input.split(",") if k.strip()]
     st.write(f"### 🔎 Searching for paragraphs containing ALL keywords: {keywords}")
 
-    # Read PDF
-full_text = ""
-with pdfplumber.open(uploaded_file) as pdf:
-    for page in pdf.pages:
-        text = page.extract_text()
-        if text:
-            full_text += text + "\n"
-
+    # Read PDF using pdfplumber
+    full_text = ""
+    with pdfplumber.open(uploaded_file) as pdf:
+        for page in pdf.pages:
+            text = page.extract_text()
+            if text:
+                full_text += text + "\n"
 
     if not full_text.strip():
         st.error("No extractable text found in the PDF.")
         st.stop()
 
-    # Split into paragraphs
     paragraphs = [p.strip() for p in full_text.split("\n\n") if len(p.strip()) > 20]
 
-    # Find paragraphs containing ALL keywords
     matched_paragraphs = []
     for para in paragraphs:
         low_para = para.lower()
         if all(k in low_para for k in keywords):
             matched_paragraphs.append(para)
 
-    # Display matched paragraphs
     if matched_paragraphs:
         st.subheader("📄 Extracted Paragraphs Containing All Keywords")
         for p in matched_paragraphs:
@@ -63,17 +55,13 @@ with pdfplumber.open(uploaded_file) as pdf:
         st.warning("No paragraphs matched all keywords.")
         st.stop()
 
-    # Combine text for word cloud
     combined_text = " ".join(matched_paragraphs)
 
-    # Preprocess text
     clean = re.sub(r"[^a-zA-Z\s]", " ", combined_text.lower())
     clean = re.sub(r"\s+", " ", clean)
 
-    # Tokenize
     tokens = word_tokenize(clean, preserve_line=True)
 
-    # Remove stopwords
     stop_words = set(stopwords.words("english"))
     words = [w for w in tokens if w not in stop_words and len(w) > 2]
 
@@ -81,7 +69,6 @@ with pdfplumber.open(uploaded_file) as pdf:
         st.error("No valid words found to generate a word cloud.")
         st.stop()
 
-    # Generate word cloud
     wordcloud = WordCloud(
         width=1000,
         height=500,
@@ -91,7 +78,6 @@ with pdfplumber.open(uploaded_file) as pdf:
         max_words=200,
     ).generate(" ".join(words))
 
-    # Display word cloud
     st.subheader("☁ Word Cloud of Extracted Paragraphs")
     plt.figure(figsize=(12, 6))
     plt.imshow(wordcloud, interpolation="bilinear")
