@@ -2,6 +2,7 @@
 
 import streamlit as st
 import pypdf
+import pdfplumber
 import nltk
 import re
 import matplotlib.pyplot as plt
