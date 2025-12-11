@@ -32,10 +32,13 @@ if uploaded_file and keywords_input.strip():
     st.write(f"### 🔎 Searching for paragraphs containing ALL keywords: {keywords}")
 
     # Read PDF
-    reader = pypdf.PdfReader(uploaded_file)
-    full_text = ""
-    for page in reader.pages:
-        full_text += page.extract_text() or ""
+full_text = ""
+with pdfplumber.open(uploaded_file) as pdf:
+    for page in pdf.pages:
+        text = page.extract_text()
+        if text:
+            full_text += text + "\n"
+
 
     if not full_text.strip():
         st.error("No extractable text found in the PDF.")
